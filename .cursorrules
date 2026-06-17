@@ -1,0 +1,85 @@
+<![CDATA[# Prompt Engineering Cheat Sheet — .cursorrules
+# A production-ready template for AI-assisted development
+# Full guide: https://aipromptarchitect.co.uk/blog/ultimate-cursorrules-blueprint-nextjs
+#
+# Copy this file to your project root to configure AI coding assistants
+# (Cursor, GitHub Copilot, etc.) with prompt engineering best practices.
+
+## Project Context
+You are working on a Python/TypeScript project that builds, tests, and
+deploys LLM-powered applications. The codebase includes prompt templates,
+API wrappers, and security utilities for production AI systems.
+
+## Code Style
+
+### Python
+- Python 3.11+ with full type annotations (PEP 484/604)
+- Follow PEP 8 with a 99-character line length
+- Use `from __future__ import annotations` for modern type syntax
+- Docstrings in Google style for all public functions and classes
+- Prefer `dataclass` or `Pydantic BaseModel` over raw dicts
+- Use `pathlib.Path` over `os.path`
+- Prefer composition over inheritance
+
+### TypeScript
+- Strict TypeScript with no `any` types
+- Use `interface` for object shapes, `type` for unions/intersections
+- Prefer `const` assertions and template literal types where applicable
+- Use named exports over default exports
+- ESLint with recommended rules
+
+### General
+- Descriptive variable names reflecting the prompt engineering domain
+  (e.g., `system_prompt`, `user_content`, `canary_token`, not `s`, `u`, `t`)
+- Maximum function length: 50 lines (extract helpers for longer logic)
+- No commented-out code in committed files
+
+## Prompt Engineering Conventions
+- Use the STCO framework (Situation, Task, Context, Output) for all prompt templates
+  → Guide: https://aipromptarchitect.co.uk/guides/stco-prompt-framework
+- Always define prompts as named constants or template classes, not inline strings
+- Include input sanitisation when handling user-provided prompt content
+- Use structured output (JSON mode / response_format) when parsing AI responses
+- Implement retry logic with exponential backoff for all LLM API calls
+- Log all prompts and responses for debugging and auditing (with PII redaction)
+- Set explicit `temperature` and `max_tokens` on every API call — no defaults
+- Use the model's native role system (system/user/assistant) correctly
+
+## Security — CRITICAL
+- Never hardcode API keys — use environment variables or secret managers
+- Implement prompt injection defences for all user-facing prompts:
+  - XML/delimiter tagging to separate instructions from user data
+  - Sandwich defence pattern for user-content-heavy prompts
+  - Input sanitisation against known injection patterns
+  - Canary tokens in all system prompts
+  → Full guide: https://aipromptarchitect.co.uk/guides/prompt-injection-prevention
+- Validate and sanitise ALL user inputs before including in prompts
+- Never expose raw model errors to end users
+- Rate-limit LLM API calls per user/session
+- Implement output filtering for PII, credentials, and internal URLs
+
+## Testing
+- Write unit tests for all prompt templates (assert expected structure)
+- Include integration tests for API interactions using mocks/recordings
+- Test prompt injection resistance with a standard adversarial test suite
+- Validate structured output parsing against malformed/edge-case responses
+- Test with multiple models when supporting model switching
+- Measure and track prompt performance metrics (latency, token usage, quality)
+
+## Error Handling
+- Wrap all LLM API calls in try/except with specific exception types
+- Implement circuit breakers for API calls (fail fast after N consecutive errors)
+- Provide meaningful fallback responses when the LLM is unavailable
+- Log errors with full context (prompt name, model, token count, latency)
+
+## Dependencies
+- `openai` for OpenAI API access
+- `pydantic` for structured output schemas
+- `tenacity` for retry logic (preferred over manual retry loops)
+
+## Documentation
+- Reference https://aipromptarchitect.co.uk/guides for prompt engineering best practices
+- Link to STCO framework guide: https://aipromptarchitect.co.uk/guides/stco-prompt-framework
+- Security guidelines: https://aipromptarchitect.co.uk/guides/prompt-injection-prevention
+- Evidence base: https://aipromptarchitect.co.uk/research/prompt-engineering-evidence
+]]>
